@@ -1,8 +1,8 @@
-import DeployButton from "@/components/DeployButton";
 import AuthButton from "@/components/AuthButton";
-import { createClient } from "@/utils/supabase/server";
-import FetchDataSteps from "@/components/tutorial/FetchDataSteps";
+import DeployButton from "@/components/DeployButton";
 import Header from "@/components/Header";
+import FetchDataSteps from "@/components/tutorial/FetchDataSteps";
+import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
 export default async function ProtectedPage() {
@@ -15,6 +15,8 @@ export default async function ProtectedPage() {
   if (!user) {
     return redirect("/login");
   }
+
+  const { data: notes } = await supabase.from("notes").select();
 
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center">
@@ -36,6 +38,8 @@ export default async function ProtectedPage() {
         <main className="flex-1 flex flex-col gap-6">
           <h2 className="font-bold text-4xl mb-4">Next steps</h2>
           <FetchDataSteps />
+          <h2 className="font-bold text-4xl mb-4">My Notes</h2>
+          <pre>{JSON.stringify(notes, null, 2)}</pre>
         </main>
       </div>
 
